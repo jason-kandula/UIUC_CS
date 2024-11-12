@@ -1,64 +1,39 @@
-import numpy as np
+from reader import MP10Dataset
+import numpy as np 
 
-###### Constants you should be using in your code ######
+def get_dataset_from_arrays(x,y):
+    """This function returns a valid pytorch dataset from feature and label vectors
 
-# You are welcome to alter these SIZES.
+    Args:
+        x ([np.array]): The feature vectors 
+        y ([np.array]): The label vectors of the dataset
 
-UP = 0
-DOWN = 1
-LEFT = 2
-RIGHT = 3
+    Returns:
+        [Dataset]: a valid pytorch dataset which you can use with the pytorch dataloaders
+    """
+    return MP10Dataset(x,y)
 
-# Colors for pygame
-WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-BLUE = (72, 61, 139)
-BLACK = (0, 0, 0)
-GREEN = (0, 255, 0)
-GREY = (128, 128, 128)
+def compute_accuracies(predicted_labels, dev_set, dev_labels):
+    yhats = predicted_labels
+    assert predicted_labels.dtype == int, "Your predicted labels have type {}, but they should have type np.int (consider using .astype(int) on your output)".format(predicted_labels.dtype)
 
-NUM_FOOD_DIR_X=3
-NUM_FOOD_DIR_Y=3
-NUM_ADJOINING_WALL_X_STATES=3
-NUM_ADJOINING_WALL_Y_STATES=3
-NUM_ADJOINING_BODY_TOP_STATES=2
-NUM_ADJOINING_BODY_BOTTOM_STATES=2
-NUM_ADJOINING_BODY_LEFT_STATES=2
-NUM_ADJOINING_BODY_RIGHT_STATES=2
-NUM_ACTIONS = 4
+    if len(yhats) != len(dev_labels):
+        print("Lengths of predicted labels don't match length of actual labels", len(yhats), len(dev_labels))
+        return 0., 0., 0., 0.
+    
+    accuracy = np.mean(yhats == dev_labels)
+    conf_m = np.zeros((len(np.unique(dev_labels)), len(np.unique(dev_labels))))
+    for i,j in zip(dev_labels, predicted_labels):
+        conf_m[i,j] +=1
 
-CHECKPOINT = 'checkpoint.npy'
+    return accuracy, conf_m
 
-def create_q_table():
-	return np.zeros((NUM_FOOD_DIR_X, NUM_FOOD_DIR_Y, NUM_ADJOINING_WALL_X_STATES, NUM_ADJOINING_WALL_Y_STATES, 
-					 NUM_ADJOINING_BODY_TOP_STATES, NUM_ADJOINING_BODY_BOTTOM_STATES, NUM_ADJOINING_BODY_LEFT_STATES,
-					 NUM_ADJOINING_BODY_RIGHT_STATES, NUM_ACTIONS))
-
-def sanity_check(arr):
-	if (type(arr) is np.ndarray and 
-		arr.shape==(NUM_FOOD_DIR_X, NUM_FOOD_DIR_Y, NUM_ADJOINING_WALL_X_STATES, NUM_ADJOINING_WALL_Y_STATES, 
-					 NUM_ADJOINING_BODY_TOP_STATES, NUM_ADJOINING_BODY_BOTTOM_STATES, NUM_ADJOINING_BODY_LEFT_STATES,
-					 NUM_ADJOINING_BODY_RIGHT_STATES,NUM_ACTIONS)):
-		return True
-	else:
-		return False
-
-def save(filename, arr):
-	if sanity_check(arr):
-		np.save(filename,arr)
-		return True
-	else:
-		print("Failed to save model")
-		return False
-
-def load(filename):
-	try:
-		arr = np.load(filename)
-		if sanity_check(arr):
-			print("Loaded model successfully")
-			return arr
-		print("Model loaded is not in the required format")
-		return None
-	except:
-		print("Filename doesnt exist")
-		return None
+def get_parameter_counts(net):
+    """ Get the parameters of your network
+    @return params: a list of tensors containing all parameters of the network
+            num_params: count of the total number of parameters
+    """
+    params = net.parameters()
+    num_parameters = sum([ np.prod(w.shape) for w  in params])
+    
+    return num_parameters, params
