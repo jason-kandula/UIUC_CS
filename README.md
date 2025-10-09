@@ -1,6 +1,3 @@
-# UIUC_CS
-undergrad from cs@uiuc
-
-CS440
+## cs440@uiuc - intro to artifical intelligence
 - AI Snake Bot
 - Neural Net Pytorch Image Classification
