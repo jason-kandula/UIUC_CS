@@ -1,6 +1,6 @@
-## cs440@uiuc - intro to artifical intelligence
-- Reinforcement Learning — Snake Q-Learning Agent
-## Overview  
+# cs440@uiuc - intro to artifical intelligence
+
+## Reinforcement Learning — Snake Q-Learning Agent -> Overview
 This project implements a **Q-learning agent** for playing the Snake game environment. The agent learns to maximize the number of food pellets eaten while avoiding death, using temporal-difference updates in a discrete state-action setting.
 
 Key aspects:
@@ -23,9 +23,7 @@ Key aspects:
 
 ----------------------------------------------------------------------------------------------------------------
 
-- Neural Net Pytorch Image Classification
-
-## Overview
+## Neural Net Pytorch Image Classification -> Overview
 
 This project implements a shallow neural network (1980s-style) in PyTorch / NumPy to classify images into 4 categories: **ship, automobile, dog, frog**. The goal is to train the model on a subset of CIFAR-10 (resized / filtered) and evaluate it on a held-out development set.
 
