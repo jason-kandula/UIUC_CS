@@ -1,5 +1,28 @@
 ## cs440@uiuc - intro to artifical intelligence
-- AI Snake Bot
+- Reinforcement Learning — Snake Q-Learning Agent
+## Overview  
+This project implements a **Q-learning agent** for playing the Snake game environment. The agent learns to maximize the number of food pellets eaten while avoiding death, using temporal-difference updates in a discrete state-action setting.
+
+Key aspects:
+
+- Discretized state representation of the snake + food + environment  
+- Actions: `{UP, DOWN, LEFT, RIGHT}`  
+- Reward scheme:  
+ • +1 for eating food  
+ • –1 for dying  
+ • –0.1 for any other move  
+- Uses **Q-learning** (off-policy TD control)  
+- Exploration policy: force exploring unvisited state-action pairs until a threshold, then greedy based on Q  
+- Decaying learning rate:  
+\[
+\alpha = \frac{C}{C + N(s,a)}
+\]
+- Discount factor \(\gamma\) for future reward  
+- Q and N tables stored and updated during training  
+- During testing, agent acts greedily (no exploration)  
+
+----------------------------------------------------------------------------------------------------------------
+
 - Neural Net Pytorch Image Classification
 
 ## Overview
